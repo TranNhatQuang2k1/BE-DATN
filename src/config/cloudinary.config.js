@@ -48,20 +48,35 @@ const storagepost = new CloudinaryStorage({
     cb(null, file.originalname); 
   }
 });
+const storageBooking = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "Booking",
+  },
+  allowedFormats: ['jpg', 'png'],
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); 
+  }
+});
+const uploadBooking = multer({
+  storage: storageBooking,
+  limits: { fileSize: '1000000' }, });
 const uploadCloud = multer({
     storage: storage,
     limits: { fileSize: '1000000' }, });
-// const uploadCloudToolHeath = multer({
-//     storage: storagetoolheath,
-//     limits: { fileSize: '1000000' }, });
-// const uploadCloudGroup = multer({
-//       storage: storagegroup,
-//       limits: { fileSize: '1000000' }, });
-// const uploadCloudPost = multer({
-//       storage: storagepost,
-//       limits: { fileSize: '1000000' }, });
-
-module.exports = uploadCloud;
-// module.exports = uploadCloudToolHeath;
-// module.exports = uploadCloudGroup;
-// module.exports = uploadCloudPost;
+const uploadCloudToolHeath = multer({
+    storage: storagetoolheath,
+    limits: { fileSize: '1000000' }, });
+const uploadCloudGroup = multer({
+      storage: storagegroup,
+      limits: { fileSize: '1000000' }, });
+const uploadCloudPost = multer({
+      storage: storagepost,
+      limits: { fileSize: '1000000' }, });
+module.exports = {
+  fileUploader: uploadCloud,
+  uploadBooking: uploadBooking,
+  uploadCloudToolHeath: uploadCloudToolHeath,
+  uploadCloudGroup: uploadCloudGroup,
+  uploadCloudPost: uploadCloudPost
+};

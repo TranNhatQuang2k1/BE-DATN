@@ -1,6 +1,17 @@
 const db = require('../models/index');
 const bcrypt = require('bcryptjs');
 // const doctorService = require('./DoctorService');
+const salt = bcrypt.genSaltSync(10);
+let hashUserPassword = (password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let hashPassword = await bcrypt.hashSync(password, salt);
+            resolve(hashPassword);
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 let handleUserLogin = (email, password) => {
     return new Promise(async(resolve, reject) => {
         try {
@@ -24,8 +35,8 @@ let handleUserLogin = (email, password) => {
 
                     let check = await bcrypt.compareSync(password, user.password);
                     if(!check) {
-                        // let hashPasswordFromBcrypt = await hashUserPassword(user.password);
-                        // console.log(hashPasswordFromBcrypt);
+                        let hashPasswordFromBcrypt = await hashUserPassword(user.password);
+                        console.log(hashPasswordFromBcrypt);
                         userData.errCode = 4;
                         userData.errMessage = "Sai mật khẩu";
                     }
@@ -87,7 +98,6 @@ let checkUserEmail = (email) => {
         try {
             let user = await db.User.findOne({
                 where: {email: email},
-                // attributes: ['id', 'email', 'password', 'firstname', 'lastname', 'image', 'gender', 'phoneNumber', 'birthday', 'address', 'status', 'role_id', 'token', 'violation', 'createdAt', 'updatedAt']
             })
             if (user) {
                 resolve(true)

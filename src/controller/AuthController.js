@@ -52,7 +52,7 @@ let handleLogin = async (req,res) => {
 
 let singup = async (req,res)=>{
     
-    if (!req.body.email || !req.body.password || !req.body.firstname || !req.body.lastname || !req.body.gender || !req.body.phoneNumber || !req.body.birthday || !req.body.address  ) {
+    if (!req.body.email || !req.body.password || !req.body.name  || !req.body.gender || !req.body.phoneNumber || !req.body.birthday || !req.body.address  ) {
         return res.status(400).json({
             erroCode:1,
             message:'nhập đầy đủ thông tin'

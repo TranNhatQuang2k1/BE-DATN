@@ -4,6 +4,7 @@ const db = require('../models/index');
 dotenv.config();
 
 let authenToken = (req, res, next) => {
+  try {
   const token = req.headers['authorization'];
   if (!token) res.sendStatus(403); // khong co token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
@@ -13,7 +14,10 @@ let authenToken = (req, res, next) => {
     req.userID = data.id;
     req.role_name = data.role_name;
     next();
-  });
+  });}
+  catch(err) {
+    res.sendStatus(403);
+  }
 };
 
 let isAdmin = (req, res, next) => {

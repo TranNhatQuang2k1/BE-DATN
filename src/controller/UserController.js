@@ -1,4 +1,4 @@
-const userService = require('../service/UserService')
+const userService = require('../services/UserService')
 
 let changePassword = async (req,res) =>{
     if(!req.body.password || !req.body.newPassword){
@@ -21,7 +21,7 @@ let changePassword = async (req,res) =>{
     }
 }
 
-let updateInforUser = async (req,res) =>{
+let updateInforUser = async (req,res) => {
     if(!req.params) {
         return res.status(200).json({
             errCode: "1",

@@ -15,6 +15,11 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        name: 'ROLE_USER',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
         name: 'ROLE_PATIENT',
         createdAt: new Date(),
         updatedAt: new Date(),

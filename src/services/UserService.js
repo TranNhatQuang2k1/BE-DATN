@@ -61,7 +61,7 @@ let createNewUser = async (data, roleName) => {
                     id= uuidv4();
                     emailService.sendSimpleEmail({
                         receiverEmail: data.email,
-                        patientName:data.lastname,
+                        patientName:data.name,
                         redirectLink:buildUrlEmail(id)
                     });
                 }
@@ -74,8 +74,7 @@ let createNewUser = async (data, roleName) => {
                     {
                         email: data.email,
                         password: hashPasswordFromBcrypt,
-                        firstname: data.firstname,
-                        lastname: data.lastname,
+                        name: data.name,
                         image: data.image,
                         gender: data.gender === '1' ? true : false,
                         phoneNumber: data.phoneNumber,
@@ -145,6 +144,7 @@ let AdminCreateUser = (data, roleName) => {
         let userData = {};
         try {
             let check = await checkUserEmail(data.email);
+            console.log('doctor')
             if(!check) {
                 let [role, created] = await db.Role.findOrCreate({
                     where: { name: roleName }
@@ -154,8 +154,7 @@ let AdminCreateUser = (data, roleName) => {
                     {
                         email: data.email,
                         password: hashPasswordFromBcrypt,
-                        firstname: data.firstname,
-                        lastname: data.lastname,
+                        name: data.name,
                         image: data.image,
                         gender: data.gender === '1' ? true : false,
                         phoneNumber: data.phoneNumber,
@@ -232,8 +231,7 @@ let updateUser = (param,data) =>{
             if(user) {
                 await db.User.update({
                     birthday: data.birthday,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
+                    name: data.name,
                     gender: data.gender === '1' ? true : false,
                     image: data.image !== '0' ? data.image : user.image,
                     gender: data.gender,
@@ -291,7 +289,7 @@ let ResetPassword = (data) =>{
                 })
                 await emailService.sendEmailToResetPw({
                     receiverEmail: user.email,
-                    patientName:user.lastname,
+                    patientName:user.name,
                     newPassword:newPaw
                 });
                 resolve({
@@ -397,7 +395,7 @@ let getListUserChatWithUser= async (data) => {
                 })
             }  
             uniq = [...new Set(arr)];
-            let sql ="select * from (select p1.id,p1.email,p1.firstname, p1.lastname, p1.image,p1.gender,p1.phoneNumber,p1.birthday,p1.address,p1.status,p1.role_id, m.id as 'message.id' ,m.date as 'message.date', m.from_user as 'message.from_user', m.text as 'message.text', m.image as 'message.image' ,m.to_user as 'message.to_user',ROW_NUMBER() OVER(PARTITION BY p1.id ORDER BY date DESC) rn from (select * from Users u where id in (:uniq)) p1 INNER JOIN MessageChats m ON (m.to_user = :user_id and m.from_user = p1.id) or ( m.from_user = :user_id and m.to_user = p1.id) ORDER BY m.date DESC) a WHERE rn = 1; ";
+            let sql ="select * from (select p1.id,p1.email,p1.name, p1.name, p1.image,p1.gender,p1.phoneNumber,p1.birthday,p1.address,p1.status,p1.role_id, m.id as 'message.id' ,m.date as 'message.date', m.from_user as 'message.from_user', m.text as 'message.text', m.image as 'message.image' ,m.to_user as 'message.to_user',ROW_NUMBER() OVER(PARTITION BY p1.id ORDER BY date DESC) rn from (select * from Users u where id in (:uniq)) p1 INNER JOIN MessageChats m ON (m.to_user = :user_id and m.from_user = p1.id) or ( m.from_user = :user_id and m.to_user = p1.id) ORDER BY m.date DESC) a WHERE rn = 1; ";
             let listUsers = await db.sequelize.query(sql,{ replacements: { uniq: uniq, user_id: data.id },type: QueryTypes.SELECT })
             return resolve({
                 errorCode:0,

@@ -6,8 +6,7 @@ module.exports = {
       {
         email: 'nhatquangtran135@gmail.com',
         password: '0935267739',
-        firstname: 'Quang',
-        lastname: 'Tran Nhat',
+        name: 'Nhat Quang',
         image: 'https://tse4.mm.bing.net/th?id=OIP.Td-1qkLRcbE2gHw51-rlWAHaHa&pid=Api&P=0&h=180',
         gender: true,
         phoneNumber: '0935267739',
@@ -22,8 +21,7 @@ module.exports = {
       {
         email: 'nhatquangtran130@gmail.com',
         password: '0935267739',
-        firstname: 'Quang',
-        lastname: 'Lee Nhat',
+        name: 'Lee Quang',
         image: 'https://tse4.mm.bing.net/th?id=OIP.eVdVaaTXBrBFWquUKu_KdwHaE-&pid=Api&P=0&h=180',
         gender: true,
         phoneNumber: '0935267739',
