@@ -1,152 +1,221 @@
-const db = require("../models");
-const { Op } = require('sequelize');
+const db= require('../models');
+const { Op, where } = require('sequelize');
+const { QueryTypes,sequelize } = require('sequelize');
+const { raw } = require('express');
 
-let addMessage = async (data) => {
+let addGroup = async (data) =>{
     return new Promise( async (resolve, reject)=>{
-        try{
-            console.log(data.from_user +" "+ data.userID)
-            if (data.from_user != data.userID) {
-                return resolve({
-                    errorCode:4,
-                    message: "bạn không có quyền này"
-                })
-            }
-            let toUser = await db.User.findByPk(data.to_user);
-            if(!toUser){
-                return resolve({
-                    errorCode:2,
-                    message: "không tồn tại người dùng có id là "+ data.to_user
-                })
-            }
-            let message = await db.MessageChat.create({
-                from_user: data.from_user,
-                to_user: data.to_user,
-                text: data.text,
-                image: data.image,
-                date: Date.now()
-            })
-            let returnMessage = await db.MessageChat.findByPk(message.id,
+        try {
+            const group= await db.Group.create(
                 {
-                    include:[
-                        {
-                            model: db.User,
-                            require: true,
-                            as: 'fromUser',
-                            attributes: {
-                                exclude: ['password', 'token']
-                            },
-                            include:
-                            {
-                                model: db.Role,
-                                required: true,
-                                as: 'role'
-                            },
-                        },
-                        {
-                            model: db.User,
-                            require: true,
-                            as: 'toUser',
-                            attributes: {
-                                exclude: ['password', 'token']
-                            },
-                            include:
-                            {
-                                model: db.Role,
-                                required: true,
-                                as: 'role'
-                            },
-                        },
-                    ],
-                    attributes: {
-                        exclude: ['collaborator_id']
-                    },
+                    name: data.name,
+                    description: data.description,
+                    img_bg: data.img_bg,
+                    avartar_group: data.avartar_group,
                 }
-            )
+            );
+
             resolve({
-                errorCode:0,
-                message: returnMessage
+                errCode:0,
+                message:group
             })
-        } catch (e){
+        } catch (e) {
             reject(e)
         }
     });
 }
 
-let getListMessage = async (data,pageNumber,size) => {
-    return new Promise( async (resolve, reject)=>{
-        try{
-            console.log(data.from_user+ " "+data.userID)
-            if (data.from_user != data.userID) {
-                console.log("abc")
+let getListGroup = async (key) => {
+    return new Promise(async(resolve, reject) => {
+        
+        try {
+            let group = await db.Group.findAll({
+                attributes: {
+                    include: [
+                      [
+                        db.sequelize.literal('(SELECT COUNT(*) FROM Postgroups WHERE Postgroups.group_id = Group.id)'),
+                        'postCount'
+                      ],
+                      [
+                        db.sequelize.literal('(SELECT COUNT(*) FROM Members WHERE Members.group_id = Group.id)'),
+                        'memberCount'
+                      ],
+
+                    ],
+                    exclude: ['createdAt', 'updatedAt']
+
+                  }
+                
+              });
+              
+              if (group.length > 0) {
                 resolve({
-                    errorCode:4,
-                    message: "bạn không có quyền này"
-                })
-            }
-            pageNumber = pageNumber-0;
-            size = size -0;
-            let resData = {};
-            const {count, rows} = await db.MessageChat.findAndCountAll(
-                {
-                    offset: pageNumber*size,
-                    limit: size,
-                    where:{
-                        [Op.or]:[
-                            {  [Op.and]:[ {from_user: data.from_user},{to_user: data.to_user}] },
-                            {  [Op.and]:[ {from_user: data.to_user},{to_user: data.from_user}] },
-                        ]
-                    },
-                    include:[
-                        {
-                            model: db.User,
-                            require: true,
-                            as: 'fromUser',
-                            attributes: {
-                                exclude: ['password', 'token']
-                            },
-                            include:
-                            {
-                                model: db.Role,
-                                required: true,
-                                as: 'role'
-                            },
-                        },
-                        {
-                            model: db.User,
-                            require: true,
-                            as: 'toUser',
-                            attributes: {
-                                exclude: ['password', 'token']
-                            },
-                            include:
-                            {
-                                model: db.Role,
-                                required: true,
-                                as: 'role'
-                            },
-                        },
-                    ],
-                    order: [
-                        ['date', 'DESC']
-                    ],
-                    attributes: {
-                        exclude: ['collaborator_id']
-                    },
+                  errCode: 0,
+                  message: group
+                });
+              } else {
+                resolve({
+                  errCode: 2,
+                  message: 'Id group khoa không tồn tại'
+                });
+              }
+
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+let deleteGroup = (data) =>{
+    return new Promise(async(resolve, reject) => {
+        try {
+            resData= {}
+            let group= await db.Group.findOne({
+                where:{
+                    id: data.id
                 }
-            )
-            resData.messages= rows;
-            resData.size=size;
-            resData.totalPages= Math.ceil(count/size);
-            resData.totalElements=count
-            resData.page = pageNumber
+            });
+
+            if( !group){
+                    resData.errCode= 2,
+                    resData.message='mã group không tồn tại'
+            } else{
+                await group.destroy();
+
+                resData.errCode= 0,
+                resData.message='xóa group thành công'
+            }
+            
+           resolve(resData)
+
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+let updateGroup = (param,data) => {
+    return new Promise(async(resolve, reject) => {
+        let resData = {};
+        try{
+            let group = await db.Group.findByPk(param.id);
+            if(group) {
+                await db.Group.update({
+                    name: data.name,
+                    description: data.description,
+                    img_bg: data.img_bg,
+                    avartar_group: data.avartar_group,
+                    // image: data.image !== '0' ? data.image : group.image,
+                },
+                {
+                    where:{
+                        id: group.id
+                    }
+                } )
+                let spe = await db.Group.findByPk(param.id);
+                resData.errCode = 0;
+                resData.errMessage = spe
+            }
+            else {
+                resData.errCode = 2;
+                resData.errMessage = "mã group không tồn tại"
+            }
             resolve(resData)
         } catch(e){
-            reject(e)
+            reject(e);
         }
     });
 }
 
-module.exports = {
-    addMessage,
-    getListMessage
+let getGroupById = async (data) => 
+{
+    return new Promise(async(resolve, reject) => {
+        try {
+            let group = await db.Group.findOne({
+                attributes: {
+                  exclude: ['createdAt', 'updatedAt']
+                },
+                where: {
+                  id: data.id
+                },
+                include: [
+                  {
+                    model: db.Postgroup,
+                    require: true,
+                    as: 'posts',
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                      {
+                        model: db.Member,
+                        required: true,
+                        as: 'members',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                        include: [
+                          {
+                            model: db.User,
+                            required: true,
+                            as: 'memberUser',
+                            attributes: [
+                              'id', 'name', 'image'
+                            ],
+                            where: { status: 1 }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                  ,
+                  {
+                    model: db.Member,
+                    required: true,
+                    as: 'members',
+                    attributes: {
+                      exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                      {
+                        model: db.User,
+                        required: true,
+                        as: 'memberUser',
+                        attributes: ['id', 'name', 'image'],
+                        where: { status: 1 }
+                      }
+                    ]
+                  }
+                ]
+              });
+              
+              
+
+            
+              
+
+            if(group){
+                resolve({
+                    errCode:0,
+                    message: group
+                })
+            } else {
+                resolve({
+                    errCode:2,
+                    message: "id chuyên khoa không tồn tại"
+                })
+            }
+
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+module.exports= {
+    addGroup,
+    getListGroup,
+    deleteGroup,
+    updateGroup,
+    getGroupById
 }

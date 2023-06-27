@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Doctor.init({
     description: {
-      type:DataTypes.STRING,
+      type:DataTypes.TEXT('long'),
       allowNull:true,
     },
     rate: DataTypes.FLOAT,

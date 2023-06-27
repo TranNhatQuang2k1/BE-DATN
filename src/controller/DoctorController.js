@@ -98,7 +98,7 @@ let updateDoctor = async (req, res) => {
             errMessage: "Thiếu tham số id"
         })
     } else {
-        if (!req.body.firsname || !req.body.lastname 
+        if (!req.body.name  
             || !req.body.gender || !req.body.phoneNumber || !req.body.birthday || !req.body.address  
             || !req.body.description || !req.body.rate || !req.body.hospital_id || !req.body.clinic_id || !req.body.specialty_id ) {
             return res.status(400).json({

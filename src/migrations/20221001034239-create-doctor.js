@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT('long'),
         allowNull:true,
       },
       rate: {

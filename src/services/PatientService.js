@@ -49,7 +49,7 @@ let getAllPatient = async (key, pageNumber, size) =>{
                     as: 'user',
                     where:{
                         [Op.or]:[
-                            { name: db.sequelize.where(db.sequelize.fn('concat', db.sequelize.col('firsname'), " ", db.sequelize.col('lastname')), 'LIKE', '%' + key + '%') },
+                            { name: db.sequelize.where(db.sequelize.fn('concat', db.sequelize.col('name'), " "), 'LIKE', '%' + key + '%') },
                         ]
                     },
                     attributes: {
@@ -164,8 +164,7 @@ let updatePatient = (param,data) =>{
                 let user= await db.User.findByPk(patient.user_id)
                 await db.User.update({
                     birthday: data.birthday,
-                    firsname: data.firsname,
-                    lastname: data.lastname,
+                    name: data.name,
                     gender: data.gender === '1' ? true : false,
                     image: data.image !== '0' ? data.image : user.image,
                     gender: data.gender,

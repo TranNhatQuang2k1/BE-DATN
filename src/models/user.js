@@ -11,11 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.Role, { foreignKey: 'role_id', as: 'role' });
-      // this.hasOne(models.Doctor,{foreignKey:'user_id',as:'doctor'})
-      // this.hasOne(models.Patient,{foreignKey:'user_id',as:'patient'})
+      this.hasOne(models.Doctor,{foreignKey:'user_id',as:'doctor'})
+      this.hasOne(models.Patient,{foreignKey:'user_id',as:'patient'})
       // this.hasOne(models.Collaborator,{foreignKey:'user_id',as:'collaborator'})
       this.hasOne(models.Admin,{foreignKey:'user_id',as:'admin'})
-      // this.hasMany(models.Notification,{foreignKey:'user_id',as:'notification'})
+      this.hasOne(models.Member,{ foreignKey: 'user_id', as: 'userMembers' });
+      this.hasMany(models.Notification,{foreignKey:'user_id',as:'notification'})
       // this.hasMany(models.MessageChat, { foreignKey: 'from_user', as: 'SendmessageChat' });
       // this.hasMany(models.MessageChat, { foreignKey: 'to_user', as: 'GetmessageChat' });
       // this.hasOne(models.Comment,{foreignKey:'user_id',as:'comment'})

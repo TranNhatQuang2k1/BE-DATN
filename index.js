@@ -4,7 +4,7 @@ const connectDB = require('./src/config/connectDB');
 const app = express()
 const http = require('http');
 const server = http.createServer(app);
-// const SocketServer = require('./socketServer')
+const SocketServer = require('./socketServer')
 
 const port = process.env.PORT || 3001;
 

@@ -55,6 +55,7 @@ let addSchedule = async (data) =>{
             
 
         }catch(e){
+            console.log(e)
             return reject(e)
         }
     })
@@ -366,8 +367,8 @@ let addScheduleMultiDate =  async (data)=>{
                         // let end = new Date(date)
                         // end = new Date(end.getTime()+ 60000*60*timesEnd[0]+ 60000* timesEnd[1])
                         // console.log(d.getFullYear() +'/'+ (d.getMonth()+1)+'/'+d.getDate()+' '+list[0])
-                        begin = new Date(d.getFullYear() +'/'+ (d.getMonth()+1)+'/'+d.getDate()+' '+list[0])
-                        end = new Date(d.getFullYear() +'/'+ (d.getMonth()+1)+'/'+d.getDate()+' '+list[1])
+                        let begin = new Date(d.getFullYear() +'/'+ (d.getMonth()+1)+'/'+d.getDate()+' '+list[0])
+                        let end = new Date(d.getFullYear() +'/'+ (d.getMonth()+1)+'/'+d.getDate()+' '+list[1])
                         // console.log(begin);
                         // console.log(end)
                         let input = {

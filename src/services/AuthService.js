@@ -1,6 +1,6 @@
 const db = require('../models/index');
 const bcrypt = require('bcryptjs');
-// const doctorService = require('./DoctorService');
+const doctorService = require('./DoctorService');
 const salt = bcrypt.genSaltSync(10);
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
@@ -48,24 +48,24 @@ let handleUserLogin = (email, password) => {
                         else {
                             
                             // Neu nguoi dung la doctor thi them cac thuoc tinh lien quan: chuyen khoa, benh vien, phong kham
-                            // if (user.role.name === "ROLE_DOCTOR") {
-                            //     let doctor = await db.Doctor.findOne({
-                            //         include: {
-                            //             model: db.User,
-                            //             required: true,
-                            //             as : 'user',
-                            //             where: { id: user.id},
-                            //         },
-                            //         raw: true,
-                            //     });
+                            if (user.role.name === "ROLE_DOCTOR") {
+                                let doctor = await db.Doctor.findOne({
+                                    include: {
+                                        model: db.User,
+                                        required: true,
+                                        as : 'user',
+                                        where: { id: user.id},
+                                    },
+                                    raw: true,
+                                });
 
-                            //     if(doctor){
-                            //         console.log(doctor.id);
-                            //         let doctor_detail = await doctorService.getDoctorById(doctor.id);
-                            //         delete doctor_detail.user;
-                            //         user.doctor = doctor_detail;
-                            //     }
-                            // }
+                                if(doctor){
+                                    console.log(doctor.id);
+                                    let doctor_detail = await doctorService.getDoctorById(doctor.id);
+                                    delete doctor_detail.user;
+                                    user.doctor = doctor_detail;
+                                }
+                            }
                             userData.errCode = 0;
                             userData.errMessage = "0k";
         

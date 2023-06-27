@@ -2,14 +2,16 @@ const auth = require('./auth')
 const express = require('express')
 const router=express.Router()
 const user = require('./user')
-
+const group = require('./group')
 const patient = require('./patient')
 const doctor = require('./doctor')
+const postgroup = require('./postgroup')
 const clinic = require('./clinic')
 const specialty = require('./specialty')
 const hospital = require('./hospital')
 const appointment = require('./appointment');
 const schedule = require('./schedule')
+const category = require('./category')
 const notification = require('./notification')
 router.get("/status",(req,res)=>{
     res.status(200).json({status:'ok'})
@@ -22,9 +24,10 @@ router.use('/user',auth)
 router.use('/patients',patient)
 
 router.use('/doctor',doctor)
-
+router.use('/category',category)
 router.use('/users',user)
-
+router.use('/group', group)
+router.use('/postgroup', postgroup)
 router.use('/clinic', clinic)
 router.use('/specialty',specialty)
 router.use('/hospital', hospital)

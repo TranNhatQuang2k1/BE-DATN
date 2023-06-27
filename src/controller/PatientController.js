@@ -2,7 +2,7 @@ const patientService=require('../services/PatientService');
 const userService=require('../services/UserService')
 
 let addPatient = async (req,res) => {
-    if (!req.body.email || !req.body.password || !req.body.firsname || !req.body.lastname || !req.body.gender || !req.body.phoneNumber || !req.body.birthday || !req.body.address  ) {
+    if (!req.body.email || !req.body.password || !req.body.name || !req.body.gender || !req.body.phoneNumber || !req.body.birthday || !req.body.address  ) {
         return res.status(400).json({
             erroCode:1,
             message:'nhap day du thong tin'

@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false
       },
       symptoms: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT('long'),
         allowNull: false
       },
       status_id: {

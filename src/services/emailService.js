@@ -34,8 +34,8 @@ let sendEmailToResetPw = async(dataSend) => {
         port: 587,
         secure: false, 
         auth: {
-            user: process.env.EMAIL_NAME, 
-            pass: process.env.EMAIL_APP_PASSWORD, 
+            user: 'nhatquangtran135@gmail.com', 
+            pass: 'welukmypesjeeoqv', 
         },
     });
 
@@ -57,8 +57,8 @@ let sendNotification = async(dataSend) => {
         port: 587,
         secure: false, 
         auth: {
-            user: process.env.EMAIL_NAME, 
-            pass: process.env.EMAIL_APP_PASSWORD, 
+            user: 'nhatquangtran135@gmail.com', 
+            pass: 'welukmypesjeeoqv', 
         },
     });
 

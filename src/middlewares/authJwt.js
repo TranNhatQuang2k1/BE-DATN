@@ -110,12 +110,15 @@ let authenUser = async(req, res, next) => {
 }
 
 let isYourSelf_Doctor = async (req,res,next) => {
+  // console.log(req.userID+ 'aa')
+  // console.log(req.body.doctor_id+ 'bb')
   let check = await db.Doctor.findOne({
     where : {  
       user_id : req.userID,
       id : req.body.doctor_id,
     },
   });
+  // console.log(check);
   if (check) {
     next();
     return;

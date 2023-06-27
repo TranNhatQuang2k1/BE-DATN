@@ -104,6 +104,7 @@ let getAppointmentForUserByUserId = async(req, res) => {
     page.totalPages= resData.totalPages;
     page.totalElements = resData.totalElements;
     page.page = resData.page;
+    console.log('zo')
     return res.status(200).json({
         errCode:0,
         message: 'OK',

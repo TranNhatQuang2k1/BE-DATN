@@ -3,37 +3,37 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Group extends Model {
+  class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Postgroup, { foreignKey: 'group_id', as: 'posts' });
-      this.hasMany(models.Member, { foreignKey: 'group_id', as: 'members' });
+      this.belongsTo(models.Postgroup, { foreignKey: 'post_id', as: 'post' });
+      this.belongsTo(models.Member, { foreignKey: 'member_id', as: 'member' });
     }
   }
-  Group.init({
-    name: {
-      type:DataTypes.STRING,
+  Comment.init({
+    post_id: {
+      type:DataTypes.INTEGER,
       allowNull:false,
     },
-    description: {
-      type:DataTypes.TEXT('long'),
+    member_id: {
+      type:DataTypes.INTEGER,
+      allowNull:false,
+    },
+    parent_id: {
+      type:DataTypes.STRING,
       allowNull:true,
     },
-    img_bg: {
-      type:DataTypes.STRING,
-      allowNull:false,
-    },
-    avartar_group: {
-      type:DataTypes.STRING,
+    content: {
+      type:DataTypes.TEXT('long'),
       allowNull:true,
     },
   }, {
     sequelize,
-    modelName: 'Group',
+    modelName: 'Comment',
   });
-  return Group;
+  return Comment;
 };
