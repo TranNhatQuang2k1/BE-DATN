@@ -2,31 +2,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Notifications', {
+    await queryInterface.createTable('Rates', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      appointment_id: {
+      doctor_id: {
         type: Sequelize.INTEGER,
         allowNull:false
       },
-      user_id: {
-        type: Sequelize.INTEGER,
+      // text: {
+      //   type: Sequelize.STRING,
+      //   allowNull:false
+      // },
+      rate: {
+        type: Sequelize.FLOAT,
         allowNull:false
       },
-      message: {
-        type: Sequelize.STRING
-      },
-      avatar_patient :
-      {
-        type: Sequelize.STRING,
-        allowNull:true
-      },
-      status: {
-        type: Sequelize.BOOLEAN,
+      patient_id: {
+        type: Sequelize.INTEGER,
         allowNull:false
       },
       createdAt: {
@@ -40,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Notifications');
+    await queryInterface.dropTable('Rates');
   }
 };

@@ -3,7 +3,7 @@ const sequelize = require('sequelize');
 const dotenv = require('dotenv'); 
 const AuthService = require('../services/AuthService');
 const userService= require('../services/UserService');
-// const patientService=require('../service/PatientService');
+const patientService=require('../services/PatientService');
 const moment =require('moment');
 
 const multer = require('multer')
@@ -81,13 +81,12 @@ let singup = async (req,res)=>{
     }
     req.body.status='0';
     console.log('aaa');
-    let response= await userService.createNewUser(req.body,'ROLE_USER');
 
-    // let message = await patientService.createPatient(req.body);
-    if(response.errCode == 0){
-        return res.status(200).json('message');
-    } else if (response.errCode ==1){
-        return res.status(409).json('message');
+    let message = await patientService.createPatient(req.body);
+    if(message.errCode == 0){
+        return res.status(200).json('email đã tồn tại');
+    } else if (message.errCode ==1){
+        return res.status(409).json('Lỗi đăng kí');
     }
     
 }

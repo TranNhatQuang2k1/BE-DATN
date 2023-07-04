@@ -66,10 +66,7 @@ let isAdminOrYourself = async(req, res, next) => {
       table = db.Patient;
       break;
     }
-    // case 'ROLE_COLLABORATORS': {
-    //   table = db.Collaborator;
-    //   break;
-    // }
+
   }
   // Kiem tra xem co phai chinh minh dang chinh sua thong tin ca nhan hay khong
   let check = await table.findOne({

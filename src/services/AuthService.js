@@ -31,6 +31,7 @@ let handleUserLogin = (email, password) => {
                     raw: true,
                     nest: true,
                 });
+                
                 if (user) {
 
                     let check = await bcrypt.compareSync(password, user.password);
@@ -60,7 +61,7 @@ let handleUserLogin = (email, password) => {
                                 });
 
                                 if(doctor){
-                                    console.log(doctor.id);
+                                    // console.log(doctor.id);
                                     let doctor_detail = await doctorService.getDoctorById(doctor.id);
                                     delete doctor_detail.user;
                                     user.doctor = doctor_detail;
@@ -85,7 +86,7 @@ let handleUserLogin = (email, password) => {
                 userData.errCode = 2;
                 userData.errMessage = "Email không tồn tại"
             }
-            
+            console.log('haha')
             resolve(userData);
         } catch(e) {
             reject(e);

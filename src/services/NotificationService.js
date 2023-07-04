@@ -1,14 +1,16 @@
 const db = require('../models');
 const { Op, where } = require('sequelize');
-let CreateNotification = (appointmentId, user_id, message) => {
+let CreateNotification = (appointmentId, user_id, message,avatar_patient) => {
     return new Promise(async (resolve, reject) => {
         try {
             let notification = await db.Notification.create({
                 appointment_id: appointmentId,
                 user_id: user_id,
                 message: message,
+                avatar_patient: avatar_patient,
                 status: 0,
             })
+            con
             resolve(notification)
         } catch (err) {
             reject(err)

@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     message: DataTypes.STRING,
+    avatar_patient: {
+      type:DataTypes.INTEGER,
+      allowNull:true
+    },
     status: {
       type:DataTypes.BOOLEAN,
       allowNull:false

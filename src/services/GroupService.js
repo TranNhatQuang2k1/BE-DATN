@@ -202,7 +202,7 @@ let getGroupById = async (data) =>
             } else {
                 resolve({
                     errCode:2,
-                    message: "id chuyên khoa không tồn tại"
+                    message: "id group không tồn tại"
                 })
             }
 

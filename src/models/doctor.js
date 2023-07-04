@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Clinic, { foreignKey: 'clinic_id', as: 'clinic' });
       this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
       this.hasMany(models.Schedule, { foreignKey: 'doctor_id', as: 'schedules' });
+      this.hasMany(models.Rate, { foreignKey: 'doctor_id', as: 'rates' });
     }
   }
   Doctor.init({
@@ -36,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:true,
     },
     specialty_id: {
+      type:DataTypes.INTEGER,
+      allowNull:false,
+    },
+    numberOfReviews: {
       type:DataTypes.INTEGER,
       allowNull:false,
     },

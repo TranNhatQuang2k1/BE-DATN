@@ -4,7 +4,7 @@ const patientService = require('./PatientService');
 const { Op, where } = require('sequelize');
 const emailService = require('./emailService');
 const notificationService = require('./NotificationService');
-// const violationService = require('./ViolationService');
+const violationService = require('./ViolationService');
 const doctorService = require('./DoctorService');
 const appointment = require('../models/appointment');
 
@@ -24,11 +24,11 @@ let createAppointment = (data) => {
             let data3 = {};
             data3.id = data.schedule_id;
             console.log('haha')
-            const createpatient= await db.Patient.findOrCreate(
-                {
-                    where: { user_id: data2.id }, raw: true
-                }
-            )
+            // const createpatient= await db.Patient.findOrCreate(
+            //     {
+            //         where: { user_id: data2.id }, raw: true
+            //     }
+            // )
             console.log('haha')
             let patient = await patientService.getPatientFromIdUser(data2);
             if (!patient) {
@@ -37,9 +37,9 @@ let createAppointment = (data) => {
                 resolve(resData);
                 return;
             }
-            console.log('haha')
+            // console.log('haha')
             let resSchedule = await ScheduleServices.getScheduleById(data3);
-            console.log('haha')
+            // console.log('haha')
             let check = await db.Appointment.findOne({
                 where: {
                     schedule_id: resSchedule.message.id,
@@ -76,9 +76,10 @@ let createAppointment = (data) => {
                 status_id: status.id,
             });
             if (appointment) {
+                
                 // Tao thong bao lich kham cho bac si
                 let message = `Bệnh nhân ${patient.user.name} đăng ký lịch khám ngày ${appointment.date.toLocaleString('en-US', { timeZone: "Asia/Jakarta" })}`;
-                notificationService.CreateNotification(appointment.id, resSchedule.message.doctor.user.id, message);
+                notificationService.CreateNotification(appointment.id, resSchedule.message.doctor.user.id, message,patient.user.image);
                 notificationService.deleteNotificationOfUserLastWeek(resSchedule.message.doctor.user.id);
                 let dataSend = {};
                 dataSend.message = message;
@@ -292,16 +293,6 @@ let acceptAppointment = (id, userId) => {
     return new Promise(async (resolve, reject) => {
         let resData = {};
         try {
-            ///////////
-            // Kiem tra xem bac si da tra tien phi su dung thang hay chua
-            // let checkPaid = await doctorService.checkPaid(userId);
-            // if (!checkPaid) {
-            //     resData.errCode = 4;
-            //     resData.message = 'Bạn chưa trả phí sử dụng tháng này';
-            //     resolve(resData);
-            //     return;
-            // }
-            ///////////
             let appointment = await db.Appointment.findByPk(id, {
                 include: [
                     {
@@ -912,7 +903,8 @@ let AdminHandlesAppointment = (id, violator) => {
                 resolve(resData);
                 return;
             }
-
+            let messageForPatient;
+            let messageForDoctor;
             let [statusDONE, created] = await db.Status.findOrCreate({
                 where: { name: "DONE" }, raw: true
             });
@@ -923,8 +915,8 @@ let AdminHandlesAppointment = (id, violator) => {
                 appointment.status_id = statusVIOLATE.id;
                 let message = `Bạn đã không đến khám theo đúng lịch khám ngày ${appointment.date.toLocaleString('en-US', { timeZone: "Asia/Jakarta" })}`;
                 let numberOfViolate = await violationService.HandleViolation(appointment.patient.user.id, message);
-                messageForPatient = `Bạn đã không đến khám theo đúng lịch khám ngày ${appointment.date.toLocaleString('en-US', { timeZone: "Asia/Jakarta" })}, số lần vi phạm của bạn đã tăng lên ${numberOfViolate}, quá 2 lần sẽ bị khóa tài khoản`;
-                messageForDoctor = `Báo cáo bệnh nhân không đến khám ngày ${appointment.date.toLocaleString('en-US', { timeZone: "Asia/Jakarta" })} đã được admin xác nhận chính xác, tài khoản bệnh nhân ${appointment.patient.user.name} đã bị cảnh cáo vi phạm`;
+                let messageForPatient = `Bạn đã không đến khám theo đúng lịch khám ngày ${appointment.date.toLocaleString('en-US', { timeZone: "Asia/Jakarta" })}, số lần vi phạm của bạn đã tăng lên ${numberOfViolate}, quá 2 lần sẽ bị khóa tài khoản`;
+                let messageForDoctor = `Báo cáo bệnh nhân không đến khám ngày ${appointment.date.toLocaleString('en-US', { timeZone: "Asia/Jakarta" })} đã được admin xác nhận chính xác, tài khoản bệnh nhân ${appointment.patient.user.name} đã bị cảnh cáo vi phạm`;
             }
             else {
                 appointment.status_id = statusDONE.id;

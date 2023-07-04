@@ -2,32 +2,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Notifications', {
+    await queryInterface.createTable('Appointments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      appointment_id: {
+      patient_id: {
         type: Sequelize.INTEGER,
-        allowNull:false
+        allowNull: false
       },
-      user_id: {
+      schedule_id: {
         type: Sequelize.INTEGER,
-        allowNull:false
+        allowNull: false
       },
-      message: {
-        type: Sequelize.STRING
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      avatar_patient :
-      {
-        type: Sequelize.STRING,
-        allowNull:true
+      symptoms: {
+        type: Sequelize.TEXT('long'),
+        allowNull: false
       },
-      status: {
-        type: Sequelize.BOOLEAN,
-        allowNull:false
+      status_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Notifications');
+    await queryInterface.dropTable('Appointments');
   }
 };

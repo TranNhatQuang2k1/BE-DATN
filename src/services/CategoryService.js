@@ -9,12 +9,11 @@ let addCategory = async (data) =>{
         try {
             const category= await db.Category.create(
                 {
-                    name: 'Tâm lý-Tâm thần',
-                    description: 'Nhiều vấn đề về tâm lý - tâm thần nghiêm trọng có thể không được phát hiện sớm. Biết cách duy trì tinh thần khỏe mạnh và cách nhận biết yếu tố nguy cơ, dấu hiệu bệnh tâm lý sẽ hữu ích cho bạn và người thân.',
-                    image: 'https://cdn.hellobacsi.com/wp-content/uploads/2021/02/Healthy-Mind-2.png',
+                    name: data.name,
+                    description: data.description,
+                    image: data.image,
                 }
             );
-
             resolve({
                 errCode:0,
                 message:category

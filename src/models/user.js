@@ -70,10 +70,10 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.STRING,
       allowNull:true
     },
-    // violation: {
-    //   type:DataTypes.INTEGER,
-    //   allowNull:true
-    // }
+    violation: {
+      type:DataTypes.INTEGER,
+      allowNull:true
+    }
   }, {
     sequelize,
     modelName: 'User',

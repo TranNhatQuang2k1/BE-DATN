@@ -3,12 +3,12 @@ const categoryService = require('../services/CategoryService')
 
 let addCategory = async (req,res) =>{
     console.log(req.body)
-    // if (!req.body.name || !req.body.description) {
-    //     return res.status(400).json({
-    //         erroCode:1,
-    //         message:'nhập đầy đủ thông tin'
-    //     })
-    // }
+    if (!req.body.name || !req.body.description) {
+        return res.status(400).json({
+            erroCode:1,
+            message:'nhập đầy đủ thông tin'
+        })
+    }
     // if (!req.files) {
     //     return res.status(400).json({
     //       erroCode: 1,

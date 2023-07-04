@@ -83,7 +83,7 @@ let createNewUser = async (data, roleName) => {
                         status: data.status,
                         role_id: role.id,
                         token: id,
-                        // violation: 0
+                        violation: 0
                     }
                 )
 
@@ -162,7 +162,7 @@ let AdminCreateUser = (data, roleName) => {
                         address: data.address,
                         status: 1,
                         role_id: role.id,
-                        // violation: 0
+                        violation: 0
                     },
                     
                 )
@@ -220,6 +220,7 @@ let changePassword = (params,data) =>{
 }
 
 let updateUser = (param,data) =>{
+    console.log(data)
     return new Promise(async(resolve, reject) => {
         let resData = {};
         try{

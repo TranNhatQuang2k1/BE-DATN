@@ -28,7 +28,7 @@ let updateInforUser = async (req,res) => {
             errMessage: "Thieu tham so id"
         })
     }
-
+    console.log(req.file)
     if (!req.file){
         req.body.image='0';
     } else{
